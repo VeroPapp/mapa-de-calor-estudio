@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Diario de Estudio</title>
+  <meta name="description" content="Registrá tus sesiones de estudio y seguí tu racha de días consecutivos." />
+  <meta name="theme-color" content="#f4f5f8" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0e1014" media="(prefers-color-scheme: dark)" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <header class="site-header">
+    <div class="brand">
+      <span class="brand__mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+          <path d="M12 6.5A3.5 3.5 0 0 0 8.5 3H3v15h5.5A3.5 3.5 0 0 1 12 21.5Z" />
+          <path d="M12 6.5A3.5 3.5 0 0 1 15.5 3H21v15h-5.5A3.5 3.5 0 0 0 12 21.5Z" />
+        </svg>
+      </span>
+      <div>
+        <h1>Diario de Estudio</h1>
+        <p class="tagline">Registrá lo que estudiás y sostené tu racha.</p>
+      </div>
+    </div>
+  </header>
+
+  <main id="contenido" class="layout">
+    <section class="card card--streak" aria-labelledby="streak-title">
+      <h2 id="streak-title" class="card__title">Racha actual</h2>
+      <p class="streak" aria-live="polite" aria-atomic="true">
+        <span class="streak__number" id="streak-count">0</span>
+        <span class="streak__unit" id="streak-unit">días</span>
+      </p>
+      <p class="streak__hint" id="streak-hint">
+        Todavía no hay sesiones. Sumá la primera y empezá tu racha.
+      </p>
+      <dl class="mini-stats">
+        <div>
+          <dt>Sesiones</dt>
+          <dd id="stat-sessions">0</dd>
+        </div>
+        <div>
+          <dt>Minutos</dt>
+          <dd id="stat-minutes">0</dd>
+        </div>
+      </dl>
+      <p class="streak__note">
+        Contamos días consecutivos con al menos una sesión. Se mantiene si estudiaste
+        hoy o ayer; las fechas futuras no cuentan.
+      </p>
+    </section>
+
+    <section class="card card--best" aria-labelledby="best-title">
+      <h2 id="best-title" class="card__title">Mejor racha histórica</h2>
+      <div class="best" aria-live="polite" aria-atomic="true">
+        <p class="best__value">
+          <span class="best__number" id="best-count">0</span>
+          <span class="best__unit" id="best-unit">días</span>
+        </p>
+        <p class="best__range" id="best-range">Todavía no hay racha registrada.</p>
+      </div>
+      <p class="best__note" id="best-note" hidden></p>
+    </section>
+
+    <section class="card card--form" aria-labelledby="form-title">
+      <h2 id="form-title" class="card__title">Nueva sesión</h2>
+      <form id="session-form" class="form" novalidate>
+        <div class="field">
+          <label for="fecha">Fecha</label>
+          <input type="date" id="fecha" name="fecha" required />
+          <p class="field__error" id="fecha-error" hidden></p>
+        </div>
+
+        <div class="field">
+          <label for="materia">Materia</label>
+          <select id="materia" name="materia" required>
+            <option value="">Elegí una materia…</option>
+          </select>
+          <p class="field__error" id="materia-error" hidden></p>
+
+          <div class="new-subject" id="new-subject" hidden>
+            <label class="new-subject__label" for="nueva-materia">Nueva materia</label>
+            <div class="field__row">
+              <input
+                type="text"
+                id="nueva-materia"
+                maxlength="60"
+                placeholder="Ej.: Análisis Matemático"
+                autocomplete="off"
+              />
+              <button type="button" class="btn btn--primary btn--compact" id="add-materia">
+                Agregar
+              </button>
+            </div>
+            <p class="field__error" id="nueva-materia-error" hidden></p>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="tema">Tema</label>
+          <input
+            type="text"
+            id="tema"
+            name="tema"
+            maxlength="120"
+            placeholder="Ej.: Derivadas y regla de la cadena"
+            autocomplete="off"
+            required
+          />
+          <p class="field__error" id="tema-error" hidden></p>
+        </div>
+
+        <div class="field">
+          <label for="minutos">Minutos</label>
+          <input
+            type="number"
+            id="minutos"
+            name="minutos"
+            min="1"
+            max="600"
+            step="1"
+            inputmode="numeric"
+            placeholder="45"
+            required
+          />
+          <p class="field__error" id="minutos-error" hidden></p>
+        </div>
+
+        <button type="submit" class="btn btn--primary">Guardar sesión</button>
+        <p class="form__note">Se guarda automáticamente en este navegador.</p>
+      </form>
+    </section>
+
+    <section class="card card--heatmap" aria-labelledby="heatmap-title">
+      <div class="history__head">
+        <h2 id="heatmap-title" class="card__title">Mapa de Calor</h2>
+        <p class="history__count">Últimos 365 días</p>
+      </div>
+      <div class="heatmap">
+        <div class="heatmap__days" aria-hidden="true">
+          <span>Lun</span>
+          <span>Mar</span>
+          <span>Mié</span>
+          <span>Jue</span>
+          <span>Vie</span>
+          <span>Sáb</span>
+          <span>Dom</span>
+        </div>
+        <div id="heatmap" class="heatmap-grid" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="card card--history" aria-labelledby="history-title">
+      <div class="history__head">
+        <h2 id="history-title" class="card__title">Historial</h2>
+        <p class="history__count" id="history-count">Sin sesiones todavía</p>
+      </div>
+      <div id="history"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Diario de Estudio · Tus datos quedan en este navegador (localStorage).</p>
+  </footer>
+
+  <div class="toast" id="toast">
+    <p class="toast__message" id="toast-message" role="status" aria-live="polite"></p>
+    <button type="button" class="toast__action" id="toast-action" hidden>Deshacer</button>
+  </div>
+
+<script src="js/state.js"></script>
+<script src="js/heatmap.js"></script>
+<script src="seed.js"></script>
+<script src="app.js"></script></body>
+</html>
